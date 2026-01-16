@@ -25,7 +25,7 @@ params = {
 }
 
 r = requests.get(
-    "https://web-api.transparency.entsoe.eu/api",
+    "https://transparency.entsoe.eu/api",
     params=params,
     headers={"Accept": "application/xml"},
     timeout=60

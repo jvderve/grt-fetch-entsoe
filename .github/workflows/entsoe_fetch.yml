@@ -1,0 +1,34 @@
+name: ENTSO-E RAW fetch (test)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch ENTSO-E RAW (A78 NL)
+        env:
+          ENTSOE_TOKEN: ${{ secrets.ENTSOE_TOKEN }}
+        run: |
+          python fetch_entsoe.py
+
+      - name: Commit RAW data
+        run: |
+          git config user.name "grt-bot"
+          git config user.email "grt-bot@users.noreply.github.com"
+          git add raw/ENTSOE/*.xml
+          git commit -m "ENTSO-E RAW test fetch (A78 NL)" || echo "No changes"
+          git push
